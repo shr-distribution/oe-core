@@ -34,6 +34,8 @@ SSTATE_SCAN_CMD ?= 'find ${SSTATE_BUILDDIR} \( -name "${@"\" -o -name \"".join(d
 
 BB_HASHFILENAME = "${SSTATE_EXTRAPATH} ${SSTATE_PKGSPEC}"
 
+SSTATE_CREATE_PKG ?= "1"
+
 SSTATE_MANMACH ?= "${SSTATE_PKGARCH}"
 
 SSTATEPREINSTFUNCS ?= ""
@@ -512,9 +514,11 @@ python sstate_task_prefunc () {
 python sstate_task_postfunc () {
     shared_state = sstate_state_fromvars(d)
     sstate_install(shared_state, d)
-    for intercept in shared_state['interceptfuncs']:
-        bb.build.exec_func(intercept, d)
-    sstate_package(shared_state, d)
+    enabled = d.getVar('SSTATE_CREATE_PKG', True)
+    if enabled and enabled == "1":
+        for intercept in shared_state['interceptfuncs']:
+            bb.build.exec_func(intercept, d)
+        sstate_package(shared_state, d)
 }
   
 
