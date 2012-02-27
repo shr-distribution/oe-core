@@ -34,15 +34,6 @@ do_install () {
 	install -m 0644 etc-services ${D}${sysconfdir}/services
 	install -m 0644 ${WORKDIR}/interfaces ${D}${sysconfdir}/network/interfaces
 	install -m 0755 ${WORKDIR}/nfsroot ${D}${sysconfdir}/network/if-pre-up.d
-
-	# Disable network manager on machines that commonly do NFS booting
-	case "${MACHINE}" in
-		"qemuarm*" | "qemux86" | "qemux86-64" | "qemumips*" | "qemuppc" | "qemush*")
-			touch ${D}${sysconfdir}/network/nm-disabled-eth0
-			;;
-		*)
-			;;
-	esac
 }
 
 CONFFILES_${PN} = "${sysconfdir}/hosts ${sysconfdir}/network/interfaces"
