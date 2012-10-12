@@ -304,8 +304,8 @@ python populate_packages_prepend () {
     do_split_packages(d, libdir, '(^(?!(CPAN\/|CPANPLUS\/|Module\/|unicore\/|auto\/)[^\/]).*)\.(pm|pl|e2x)', 'perl-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)
 }
 
-PACKAGES_DYNAMIC = "^perl-module-.*"
-PACKAGES_DYNAMIC_virtclass-nativesdk = "^nativesdk-perl-module-.*"
+PACKAGES_DYNAMIC += "^perl-module-.*"
+PACKAGES_DYNAMIC_virtclass-nativesdk += "^nativesdk-perl-module-.*"
 
 RPROVIDES_perl-lib = "perl-lib"
 

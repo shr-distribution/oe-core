@@ -89,4 +89,4 @@ RRECOMMENDS_packagegroup-core-sdk = "\
 #    d.setVar('PACKAGES', ' '.join(pkgs))
 #}
 #
-#PACKAGES_DYNAMIC = "^packagegroup-core-sdk-.*"
+#PACKAGES_DYNAMIC += "^packagegroup-core-sdk-.*"
