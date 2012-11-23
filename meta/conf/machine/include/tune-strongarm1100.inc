@@ -8,5 +8,4 @@ TUNE_CCARGS += "${@bb.utils.contains("TUNE_FEATURES", "strongarm", "-mtune=stron
 AVAILTUNES += "strongarm"
 TUNE_FEATURES_tune-strongarm = "${TUNE_FEATURES_tune-armv4} strongarm"
 PACKAGE_EXTRA_ARCHS_tune-strongarm = "${PACKAGE_EXTRA_ARCHS_tune-armv4}"
-
-
+TARGET_LD_KERNEL_ARCH += "${@bb.utils.contains("DEFAULTTUNE", "strongarm", "--fix-v4bx", "", d)}"
