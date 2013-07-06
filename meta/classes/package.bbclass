@@ -1354,6 +1354,25 @@ python package_do_shlibs() {
     # Take shared lock since we're only reading, not writing
     lf = bb.utils.lockfile(d.expand("${PACKAGELOCK}"))
 
+    # WIP: this is more like pseudo-code of what I would like to do if possible
+    # Should return list of packages created by recipes which have their do_package task
+    # in dependency_tree of pn.do_package
+    def get_packages_from_dependency_tree(pn):
+        deps = get_recipes_dependent_on_from_task(pn, "do_package", "do_package")
+        return get_package_list(deps)
+
+    # WIP: this is more like pseudo-code of what I would like to do if possible
+    # Walks dependency tree of pn.task and returns list of pn acumulated from pn.task_dep found there
+    def get_dependency_tree(pn, task, task_dep):
+        # this doesn't include transitive dependencies or check for 'task' name
+        deps = d.getVar('DEPENDS', True)
+        return deps
+
+    # WIP: this is more like pseudo-code of what I would like to do if possible
+    # Reads pkgdata and return list of packages created by pn
+    def get_package_list(pn_list):
+        return pn_list
+        
     def read_shlib_providers:
         list_re = re.compile('^(.*)\.list$')
         # Go from least to most specific since the last one found wins
@@ -1547,6 +1566,8 @@ python package_do_shlibs() {
         bb.debug(2, "calculating shlib requirements for %s" % pkg)
 
         deps = list()
+        pn = d.getVar('PN', True)
+        allowed_deps = get_packages_from_dependency_tree(pn)
         for n in needed[pkg]:
             if n in shlib_provider.keys():
                 (dep_pkg, ver_needed) = shlib_provider[n]
@@ -1554,6 +1575,10 @@ python package_do_shlibs() {
                 bb.debug(2, '%s: Dependency %s requires package %s' % (pkg, n, dep_pkg))
 
                 if dep_pkg == pkg:
+                    continue
+
+                if dep_pkg not in allowed_deps:
+                    bb.warn("Skipping dependency on %s - shared library provider for %s, because %s doesn't have any dependency on it" % (dep_pkg, n, pn))
                     continue
 
                 if ver_needed:
